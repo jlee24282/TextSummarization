@@ -9,20 +9,8 @@ class sentence2vec(object):
     """
     Returning value in dictionary format
     """
-    def __init__(self, datadir):
-        csvData   = pd.read_csv(datadir)
-        self.data = []
-
-        for row in csvData.iterrows():
-            article = {
-                "topic": row[1]["headlines"],
-                "summarized": row[1]["text"],
-                "text_sentences": str(row[1]["ctext"]).split("."),
-                "text_words": str(row[1]["ctext"]).split(" "),
-                "date": row[1]["date"],
-                "author": row[1]["author"]}
-
-            self.data.append(article)
+    def __init__(self, data):
+        self.data = data
 
     def getData(self):
         return self.data
