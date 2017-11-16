@@ -9,10 +9,11 @@ class sentence2vec(object):
     """
     Returning value in dictionary format
     """
-    def __init__(self, data):
+    def __init__(self, data, model):
         self.data = data
+        self.model = model
 
-    def getData(self):
+    def convert(self):
         return self.data
 
 

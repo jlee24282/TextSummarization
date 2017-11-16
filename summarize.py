@@ -15,16 +15,16 @@ class summary(object):
         self.model = None
 
     def run(self, vectoerLength):
-        sentencesVec = sentence2vec()
-        clusteringSentences = clustering()
 
         if self.mode == 'test':
             # test
             modeldir = 'models/newsarticle_300_' + vectoerLength
             self.model = gensim.models.Word2Vec.load(modeldir)
+            sentencesVec = sentence2vec(self.data, self.model)
+            clusteringSentences = clustering(self.data)
 
-            result = sentencesVec
-            result = clusteringSentences
+            result = sentencesVec.convert()
+            result = clusteringSentences.getresult(result)
             return result
 
         else:
