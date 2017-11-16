@@ -5,7 +5,7 @@ Data is from https://www.kaggle.com/sunnysai12345/news-summary/data
 Kondalarao Vonteru
 """
 
-class csvReader(object):
+class clustering(object):
     """
     Returning value in dictionary format
     """

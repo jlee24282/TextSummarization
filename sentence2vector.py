@@ -5,7 +5,7 @@ Data is from https://www.kaggle.com/sunnysai12345/news-summary/data
 Kondalarao Vonteru
 """
 
-class csvReader(object):
+class sentence2vec(object):
     """
     Returning value in dictionary format
     """
@@ -29,5 +29,4 @@ class csvReader(object):
 
 
 if __name__ == '__main__':
-    cr = csvReader('data/news_summary.csv')
-    print cr.getData()[0]
+    print ''
