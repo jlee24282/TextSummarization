@@ -91,8 +91,14 @@ if __name__ == '__main__':
         print closest
 
         print len(data[i]['sentences_score']), len(data[i]['text_sentencesL'])
+        result = ''
         for k in closest:
-            print k
-            print data[i]['text_sentencesL'][k]
-        for idx, l in enumerate(kmeans.labels_):
-            print(l, data[i]['text_sentencesL'][idx])
+            s = str(data[i]['text_sentencesL'][k])
+            print s
+            if len(s) > 0:
+                s = s.strip()
+                s = s.capitalize()
+                result = result + s
+                result = result + '. '
+        print result
+        data[i]['result'] = result

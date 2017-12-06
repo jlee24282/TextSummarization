@@ -22,14 +22,17 @@ class clustering(object):
             X = np.array(data[i]['sentences_score'])
             kmeans = KMeans(n_clusters=5, random_state=0).fit(X)
             closest, _ = pairwise_distances_argmin_min(kmeans.cluster_centers_, X)
-            print closest
-
-            print len(data[i]['sentences_score']), len(data[i]['text_sentencesL'])
+            result = ''
             for k in closest:
-                print k
-                print data[i]['text_sentencesL'][k]
-        return self.data
+                s = str(data[i]['text_sentencesL'][k])
+                if len(s) > 0:
+                    s = s.strip()
+                    s = s.capitalize()
+                    result = result + s
+                    result = result + '. '
+            data[i]['result'] = result
 
+        return self.data
 
 if __name__ == '__main__':
     print ''

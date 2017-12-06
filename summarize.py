@@ -3,6 +3,7 @@ import gensim
 import reader
 from sentence2vector import sentence2vec
 from cluster import clustering
+import pandas as pd
 
 class summary(object):
     """
@@ -31,6 +32,7 @@ class summary(object):
             #run process
             data = sentencesVec.convert()
             result = clusteringSentences.getresult(data)
+            
             return result
 
         else:
