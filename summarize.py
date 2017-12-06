@@ -32,7 +32,8 @@ class summary(object):
             #run process
             data = sentencesVec.convert()
             result = clusteringSentences.getresult(data)
-            
+
+            pd.DataFrame(result).to_csv('data/output/output.csv', index=False)
             return result
 
         else:

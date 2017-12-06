@@ -5,6 +5,7 @@ import numpy as np
 from scipy.cluster.vq import kmeans, vq
 from sklearn.metrics import pairwise_distances_argmin_min
 from reader import csvReader
+import pandas as pd
 
 """
 Data is from https://www.kaggle.com/sunnysai12345/news-summary/data
@@ -102,3 +103,6 @@ if __name__ == '__main__':
                 result = result + '. '
         print result
         data[i]['result'] = result
+        del data[i]['sentences_score']
+
+    pd.DataFrame(data).to_csv('data/output/output.csv', index=False)

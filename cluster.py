@@ -2,6 +2,7 @@
 from sklearn.cluster import KMeans
 import numpy as np
 from sklearn.metrics import pairwise_distances_argmin_min
+import pandas as pd
 
 """
 Data is from https://www.kaggle.com/sunnysai12345/news-summary/data
@@ -31,6 +32,8 @@ class clustering(object):
                     result = result + s
                     result = result + '. '
             data[i]['result'] = result
+            del data[i]['sentences_score']
+
 
         return self.data
 
