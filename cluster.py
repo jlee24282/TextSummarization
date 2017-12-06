@@ -12,7 +12,12 @@ class clustering(object):
     def __init__(self, data):
         self.data = data
 
-    def getresult(self, sentencevectors):
+    def getresult(self, data):
+        self.data = data
+
+
+
+
         return self.data
 
 

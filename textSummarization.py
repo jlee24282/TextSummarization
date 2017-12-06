@@ -6,8 +6,9 @@ import argparse
 def main():
     training = True
     fileDir = "data/news_summary.csv"
-    data = csvReader.getData(fileDir)
-
+    creader = csvReader(fileDir)
+    data = creader.getData()
+    stopwords = creader.getStopwords()
 
     logging.basicConfig(format='%(asctime)s: %(message)s',
                         level=logging.DEBUG,
@@ -21,7 +22,7 @@ def main():
 
     args = parser.parse_args()
 
-    summary(args.mode, args.modelDir).run()
+    summary(args.mode, data, stopwords, args.modelDir).run()
 
 if __name__ == "__main__":
     main()

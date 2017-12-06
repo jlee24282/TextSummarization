@@ -8,23 +8,29 @@ class summary(object):
     """
     Returning value in dictionary format
     """
-    def __init__(self, mode, data, modelDir):
+    def __init__(self, mode, article,stopwords, modelDir):
         self.mode = mode
         self.modelDir = modelDir
-        self.data = data
+        self.data = article
+        self.stopwords = stopwords
         self.model = None
 
     def run(self, vectoerLength):
 
         if self.mode == 'test':
-            # test
+            '''
+            test
+            '''
             modeldir = 'models/newsarticle_300_' + vectoerLength
             self.model = gensim.models.Word2Vec.load(modeldir)
-            sentencesVec = sentence2vec(self.data, self.model)
+
+            #initialize classes
+            sentencesVec = sentence2vec(self.data, self.model, self.stopwords)
             clusteringSentences = clustering(self.data)
 
-            result = sentencesVec.convert()
-            result = clusteringSentences.getresult(result)
+            #run process
+            data = sentencesVec.convert()
+            result = clusteringSentences.getresult(data)
             return result
 
         else:
