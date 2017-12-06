@@ -1,5 +1,7 @@
+
 from sklearn.cluster import KMeans
-from scipy.cluster.vq import kmeans, vq
+import numpy as np
+from sklearn.metrics import pairwise_distances_argmin_min
 
 """
 Data is from https://www.kaggle.com/sunnysai12345/news-summary/data
@@ -16,11 +18,16 @@ class clustering(object):
     def getresult(self, data):
         self.data = data
 
-        # kmeans = KMeans(n_clusters=2)
+        for i in range(len(data)):
+            X = np.array(data[i]['sentences_score'])
+            kmeans = KMeans(n_clusters=5, random_state=0).fit(X)
+            closest, _ = pairwise_distances_argmin_min(kmeans.cluster_centers_, X)
+            print closest
 
-        codebook, _ = kmeans(y, 3)
-        cluster_indices, _ = vq(y, codebook)
-
+            print len(data[i]['sentences_score']), len(data[i]['text_sentencesL'])
+            for k in closest:
+                print k
+                print data[i]['text_sentencesL'][k]
         return self.data
 
 

@@ -3,6 +3,7 @@ import gensim, logging
 from sklearn.cluster import KMeans
 import numpy as np
 from scipy.cluster.vq import kmeans, vq
+from sklearn.metrics import pairwise_distances_argmin_min
 from reader import csvReader
 
 """
@@ -65,29 +66,33 @@ if __name__ == '__main__':
     data = data[0:5]
     for i in range(len(data)):
         data[i]['sentences_score'] = []
-        for k in range(len(data[i])):
-            for sentence in data[i]['text_sentencesL']:
-                sentenceScore = 0
-                wordTotal = 0
-                for word in sentence:
-                    try:
-                        if word not in stopwords:
-                            score = model.wv[word]
-                            wordTotal += 1
-                            sentenceScore += score
-                    except:
-                        pass
-                # print sentenceScore
+        for sentence in data[i]['text_sentencesL']:
+            sentenceScore = 0
+            wordTotal = 0
+            for word in sentence:
                 try:
-                    sentenceScore = sentenceScore / wordTotal
+                    if word not in stopwords:
+                        score = model.wv[word]
+                        wordTotal += 1
+                        sentenceScore += score
                 except:
-                    sentenceScore = [0]*100
-                data[i]['sentences_score'].append(sentenceScore)
+                    pass
+            # print sentenceScore
+            try:
+                sentenceScore = sentenceScore / wordTotal
+            except:
+                sentenceScore = [0]*100
+            data[i]['sentences_score'].append(sentenceScore)
 
     for i in range(len(data)):
         X = np.array(data[i]['sentences_score'])
-        kmeans = KMeans(n_clusters=10, random_state=0).fit(X)
+        kmeans = KMeans(n_clusters=5, random_state=0).fit(X)
+        closest, _ = pairwise_distances_argmin_min(kmeans.cluster_centers_, X)
+        print closest
+
+        print len(data[i]['sentences_score']), len(data[i]['text_sentencesL'])
+        for k in closest:
+            print k
+            print data[i]['text_sentencesL'][k]
         for idx, l in enumerate(kmeans.labels_):
-            print idx
-            print len(data[i]['text_sentencesL'])
             print(l, data[i]['text_sentencesL'][idx])
