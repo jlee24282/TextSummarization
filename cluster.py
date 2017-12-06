@@ -1,4 +1,5 @@
-import pandas as pd
+from sklearn.cluster import KMeans
+from scipy.cluster.vq import kmeans, vq
 
 """
 Data is from https://www.kaggle.com/sunnysai12345/news-summary/data
@@ -15,8 +16,10 @@ class clustering(object):
     def getresult(self, data):
         self.data = data
 
+        # kmeans = KMeans(n_clusters=2)
 
-
+        codebook, _ = kmeans(y, 3)
+        cluster_indices, _ = vq(y, codebook)
 
         return self.data
 

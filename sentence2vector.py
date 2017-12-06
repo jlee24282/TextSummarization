@@ -1,6 +1,8 @@
 import json
 import gensim, logging
-
+from sklearn.cluster import KMeans
+import numpy as np
+from scipy.cluster.vq import kmeans, vq
 from reader import csvReader
 
 """
@@ -45,6 +47,7 @@ class sentence2vec(object):
         return self.data
 
 
+
 if __name__ == '__main__':
     print ''
 
@@ -53,31 +56,38 @@ if __name__ == '__main__':
     stopwords = csvReader(fileDir).getStopwords()
 
     logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
-    modeldir = 'models/newsarticle_300_100_'
+    modeldir = 'models/newsarticle_600_100'
     model = gensim.models.Word2Vec.load(modeldir)
     data[0]['text_wordsL'][0]
     print (model.wv[data[0]['text_wordsL'][0]] + model.wv[data[0]['text_wordsL'][0]]) / 2
 
     print data[0]['text_wordsL'][0]
+    data = data[0:5]
     for i in range(len(data)):
         data[i]['sentences_score'] = []
         for k in range(len(data[i])):
-            sentence = str(data[i]['text_sentencesL'][0]).split(' ')
-            sentenceScore = 0
-            wordTotal = 0
-            for word in sentence:
+            for sentence in data[i]['text_sentencesL']:
+                sentenceScore = 0
+                wordTotal = 0
+                for word in sentence:
+                    try:
+                        if word not in stopwords:
+                            score = model.wv[word]
+                            wordTotal += 1
+                            sentenceScore += score
+                    except:
+                        pass
+                # print sentenceScore
                 try:
-                    if word not in stopwords:
-                        score = model.wv[word]
-                        wordTotal += 1
-                        sentenceScore += score
+                    sentenceScore = sentenceScore / wordTotal
                 except:
-                    pass
-            # print sentenceScore
-            try:
-                sentenceScore = sentenceScore / wordTotal
-            except:
-                sentenceScore = [0]*100
-            data[i]['sentences_score'].append(sentenceScore)
+                    sentenceScore = [0]*100
+                data[i]['sentences_score'].append(sentenceScore)
 
-    print data[0]['sentences_score'][0]
+    for i in range(len(data)):
+        X = np.array(data[i]['sentences_score'])
+        kmeans = KMeans(n_clusters=10, random_state=0).fit(X)
+        for idx, l in enumerate(kmeans.labels_):
+            print idx
+            print len(data[i]['text_sentencesL'])
+            print(l, data[i]['text_sentencesL'][idx])

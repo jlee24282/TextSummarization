@@ -25,7 +25,7 @@ print len(sentences), sentences
 # train word2vec on the two sentences
 model = gensim.models.Word2Vec(sentences, min_count=5, size=50)
 
-modeldir = 'models/newsarticle_300_50_'
+modeldir = 'models/newsarticle_600_50'
 model.save(modeldir)
 # new_model = gensim.models.Word2Vec.load(modeldir)
 #
