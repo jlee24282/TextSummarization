@@ -16,14 +16,14 @@ class sentence2vec(object):
     """
     Returning value in dictionary format
     """
-    def __init__(self, data, model, stopwords):
+    def __init__(self, data, model, stopwords, vecsize):
         self.data = data
         self.model = model
         self.stopwords = stopwords
+        self.vecsize = vecsize
 
     def convert(self):
         data = self.data
-        data['text_words']
 
         for i in range(len(data)):
             data[i]['sentences_score'] = []
@@ -43,7 +43,7 @@ class sentence2vec(object):
                 try:
                     sentenceScore = sentenceScore / wordTotal
                 except:
-                    sentenceScore = [0] * 100
+                    sentenceScore = [0] * int(self.vecsize)
                 data[i]['sentences_score'].append(sentenceScore)
 
         return self.data
@@ -58,13 +58,13 @@ if __name__ == '__main__':
     stopwords = csvReader(fileDir).getStopwords()
 
     logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
-    modeldir = 'models/newsarticle_600_100'
+    modeldir = 'models/newsarticle600_100'
     model = gensim.models.Word2Vec.load(modeldir)
     data[0]['text_wordsL'][0]
     print (model.wv[data[0]['text_wordsL'][0]] + model.wv[data[0]['text_wordsL'][0]]) / 2
 
     print data[0]['text_wordsL'][0]
-    data = data[0:5]
+    data = data[0:100]
     for i in range(len(data)):
         data[i]['sentences_score'] = []
         for sentence in data[i]['text_sentencesL']:

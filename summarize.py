@@ -1,4 +1,3 @@
-import word2vec
 import gensim
 import reader
 from sentence2vector import sentence2vec
@@ -9,24 +8,26 @@ class summary(object):
     """
     Returning value in dictionary format
     """
-    def __init__(self, mode, article,stopwords, modelDir):
+    def __init__(self, mode, article,stopwords, modelDir, docsize):
         self.mode = mode
         self.modelDir = modelDir
-        self.data = article
         self.stopwords = stopwords
         self.model = None
+        self.docsize = docsize
+        self.data = article[-int(docsize):]
+        self.vecSize = modelDir.split('_')[1]
 
-    def run(self, vectoerLength):
+    def run(self):
 
         if self.mode == 'test':
             '''
             test
             '''
-            modeldir = 'models/newsarticle_300_' + vectoerLength
+            modeldir = self.modelDir
             self.model = gensim.models.Word2Vec.load(modeldir)
 
             #initialize classes
-            sentencesVec = sentence2vec(self.data, self.model, self.stopwords)
+            sentencesVec = sentence2vec(self.data, self.model, self.stopwords, self.vecSize)
             clusteringSentences = clustering(self.data)
 
             #run process

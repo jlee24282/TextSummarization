@@ -4,16 +4,50 @@ from PyRouge.pyrouge import Rouge
 data = pd.read_csv('data/output/output.csv')
 r = Rouge()
 
-for row in data.iterrows():
-    system_generated_summary = row[1]['result']
-    manual_summmary = row[1]['summarizedL']
-    [precision, recall, f_score] = r.rouge_l([system_generated_summary], [manual_summmary])
-    print("Precision is :" + str(precision) + "\nRecall is :" + str(recall) + "\nF Score is :" + str(f_score))
+# for row in data.iterrows():
+#     system_generated_summary = row[1]['result']
+#     manual_summmary = row[1]['summarizedL']
+#     [precision, recall, f_score] = r.rouge_l([system_generated_summary], [manual_summmary])
+#     print("Precision is :" + str(precision) + " Recall is :" + str(recall) + " F Score is :" + str(f_score))
 
-# system_generated_summary = "The Kyrgyz President pushed through the law requiring the use of ink during the upcoming Parliamentary and Presidential elections In an effort to live up to its reputation in the 1990s as an island of democracy. The use of ink is one part of a general effort to show commitment towards more open elections. improper use of this type of ink can cause additional problems as the elections in Afghanistan showed. The use of ink and readers by itself is not a panacea for election ills."
-#
-# manual_summmary = "The use of invisible ink and ultraviolet readers in the elections of the Kyrgyz Republic which is a small, mountainous state of the former Soviet republic, causing both worries and guarded optimism among different sectors of the population. Though the actual technology behind the ink is not complicated, the presence of ultraviolet light (of the kind used to verify money) causes the ink to glow with a neon yellow light. But, this use of the new technology has caused a lot of problems. "
-#
-# [precision, recall, f_score] = r.rouge_l([system_generated_summary], [manual_summmary])
-#
-# print("Precision is :"+str(precision)+"\nRecall is :"+str(recall)+"\nF Score is :"+str(f_score))
+
+from pythonrouge.pythonrouge import Pythonrouge
+# system summary & reference summary
+average1 = 0
+average2 = 0
+average3 = 0
+total = len(data)
+highest = 0
+lowest = 10000
+index = 0
+for row in data.iterrows():
+    summary = [[row[1]['result']]]
+    reference = [[[row[1]['summarizedL']]]]
+    rouge = Pythonrouge(summary_file_exist=False,
+                        summary=summary, reference=reference,
+                        n_gram=3, ROUGE_SU4=False, ROUGE_L=False,
+                        recall_only=True, stemming=True, stopwords=True,
+                        word_level=False, length_limit=False, length=50,
+                        use_cf=True, cf=95, scoring_formula='average',
+                        resampling=True, samples=1000, favor=False, p=0.8)
+    score = rouge.calc_score()
+    print score, row[1]['topic']
+    index += 1
+    average1 += score['ROUGE-1']
+    average2 += score['ROUGE-2']
+    average3 += score['ROUGE-3']
+    if highest < score['ROUGE-1']:
+        highest = score['ROUGE-1']
+    if lowest > score['ROUGE-1']:
+        lowest = score['ROUGE-1']
+
+average1 = average1/total
+average2 = average2/total
+average3 = average3/total
+
+# print 'Overal Average (ROUGE-1-F): ', averageF
+print 'Overall Average (ROUGE-1): ', average1
+print 'Overall Average (ROUGE-2): ', average2
+print 'Overall Average (ROUGE-3): ', average3
+print 'Highest (ROUGE-1-R): ', highest
+print 'Lowest (ROUGE-1-R): ', lowest
