@@ -16,20 +16,20 @@ class csvReader(object):
 
         for i in range(len(self.stopwords)):
             self.stopwords[i] = self.stopwords[i].replace('\n', '')
-
         for row in csvData.iterrows():
-            article = {
-                "topic": row[1]["headlines"],
-                "summarized": row[1]["text"],
-                "summarizedL": str(row[1]["text"]).lower(),
-                "text_sentences": str(row[1]["ctext"]).split("."),
-                "text_sentencesL": str(row[1]["ctext"]).lower().split("."),
-                "text_words": str(row[1]["ctext"]).split(" "),
-                "text_wordsL": str(row[1]["ctext"]).lower().split(" "),
-                "date": row[1]["date"],
-                "author": row[1]["author"]}
+            if 2200 > len(str(row[1]["ctext"])) > 1200:
+                article = {
+                    "topic": row[1]["headlines"],
+                    "summarized": row[1]["text"],
+                    "summarizedL": str(row[1]["text"]).lower(),
+                    "text_sentences": str(row[1]["ctext"]).split("."),
+                    "text_sentencesL": str(row[1]["ctext"]).lower().split("."),
+                    "text_words": str(row[1]["ctext"]).split(" "),
+                    "text_wordsL": str(row[1]["ctext"]).lower().split(" "),
+                    "date": row[1]["date"],
+                    "author": row[1]["author"]}
 
-            self.data.append(article)
+                self.data.append(article)
 
     def getData(self):
         return self.data
